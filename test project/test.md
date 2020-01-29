@@ -1,8 +1,27 @@
+---
+name: testman
+tags:
+  - @tag
+  - @othertag
+backlinks:
+  - characters/bill.md
+---
+
 # Heading
+## heading
+### heading
+
+#not a heading
 
 * bullet <em>embedded html</em>
 * bullet
 * [link](characters/bill.md)
+
+@tag @othertag
+
+[[wikilink]]
+
+bill < autolink
 
 ---
 

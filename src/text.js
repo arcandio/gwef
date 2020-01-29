@@ -2,6 +2,35 @@ const showdown = require('showdown')
 showdown.setFlavor('github')
 const converter = new showdown.Converter()
 
+const r = {
+	heading1: {
+		re: new RegExp(/^#\s+\S+/),
+		blocktype: 'h1',
+		containertype: null
+	}
+}
+
+const allregexes = {
+	blank: "^$",
+	heading1: "^#\\s+.+",
+	heading2: "^##\\s+.+",
+	heading3: "^###\\s+.+",
+	heading4: "^####\\s+.+",
+	heading5: "^#####\\s+.+",
+	heading6: "^######\\s+.+",
+	checkbox: "^[\\*|\\-]\\s+\\[\\s?\\].+",
+	bullet: "^[\\*|\\-]\\s.+",
+	numbered: "^\\d\\.\\s.+",
+	paragraph: "."
+}
+rl = ""
+for (let key in allregexes){
+	rl += "("
+	rl += allregexes[key]
+	rl += ")|"
+}
+rl = new RegExp(rl.slice(0,-1))
+
 function LoadAllBlocks(data){
 	ed = document.getElementById("editor")
 	ed.innerHTML = ''
@@ -10,25 +39,45 @@ function LoadAllBlocks(data){
 	//ed.innerHTML = converter.makeHtml(data)
 	lines.forEach(line => {
 		div = document.createElement('div')
-		mb = new MdBlock(line, div)
-		console.log(mb)
-		div.setAttribute('data-mdblock', mb)
+		div.setAttribute('data-md', line)
 		ed.appendChild(div)
-		b = div.getAttribute('data-mdblock')
-		console.log(b)
-		b.refresh()
-		/*
-		h = ReplaceParagraph(line)
-		ed.innerHTML += h*/
+		DetermineContainer(div)
+		ParseMd(div)
 	})
 }
 window.LoadAllBlocks = LoadAllBlocks
 
-function ReplaceParagraph(input, previous, container){
-	// assume the text has arbitrary html,
-	// and we're just here to clean it up
-	html = converter.makeHtml(input)
-	return html
+function DetermineContainer(div){
+	previousElement = div.previousElementSibling
+	//console.log(previousElement)
+	md = div.getAttribute('data-md')
+	containertype = null
+	matches = [...md.matchAll(rl)]
+	index = GetIndex(matches)
+	blocktype = Object.keys(allregexes)[index]
+	console.log(blocktype)
+	div.setAttribute('data-blocktype', blocktype)
+	div.setAttribute('data-containertype', containertype)
+}
+
+function GetIndex(array){
+	//console.log(array)
+	if (!array || array.length === 0){
+		return null
+	}
+	//always skip first one
+	array = array[0].slice(1)
+	for (i = 0; i < array.length; i++){
+		if (array[i] !== undefined){
+			return i
+		}
+	}
+}
+
+function ParseMd(div){
+	md = div.getAttribute('data-md')
+	html = converter.makeHtml(md)
+	div.innerHTML = md
 }
 
 
@@ -53,21 +102,3 @@ calculating changes to md
 newText - oldMd.toHtml() = remainderMd
 
 */
-
-class MdBlock{
-	constructor(model, div){
-		this.model = model
-		this.div = div
-		this.view = model
-		div.innerHTML = model
-	}
-	refresh() {
-		div.innerHTML = converter.makeHtml(this.model)
-	}
-	combine(){
-		/*
-		* check to see what type I should be
-		* check previous block to see if I should get in their container
-		*/
-	}
-}

@@ -101,4 +101,36 @@ TEXT
 
 ===================================================
 */
-
+[data-blocktype^="heading"]{
+	font-weight: bold;
+}
+[data-blocktype="heading1"]{
+	font-size: 3rem;
+}
+[data-blocktype="heading2"]{
+	font-size: 2.75rem;
+}
+[data-blocktype="heading3"]{
+	font-size: 2.5rem;
+}
+[data-blocktype="heading4"]{
+	font-size: 2.25rem;
+}
+[data-blocktype="heading5"]{
+	font-size: 2rem;
+}
+[data-blocktype="heading6"]{
+	font-size: 1.75rem;
+}
+[data-blocktype="bullet"]{
+	padding-left: 1rem;
+}
+[data-blocktype="checkbox"]{
+	padding-left: 1rem;
+}
+[data-blocktype="numbered"]{
+	padding-left: 1rem;
+}
+[data-blocktype="paragraph"]{
+	margin: 1rem 0;
+}
