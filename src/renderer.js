@@ -29,4 +29,5 @@
  import './text.js'
  import './ui.js'
  import './data.js'
+ import './contextmenu.js'
  //import './test.js'
