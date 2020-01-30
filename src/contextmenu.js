@@ -49,11 +49,7 @@ window.addEventListener('dblclick', (e) => {
 /*================================================================================================================*/
 
 function ClearInline(e){
-	sel = document.getSelection()
-	parent = sel.baseNode.parentElement
-	if(parent.parentElement !== document.getElementById('editor')){
-		parent = parent.parentElement
-	}
+	parent = GetCursorElement()
 	console.log(parent.innerText)
 	parent.innerHTML = parent.innerText
 }

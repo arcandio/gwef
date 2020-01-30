@@ -30,6 +30,23 @@ function RecieveKeys(e){
 	e.metaKey
 	e.repeat
 	*/
+	//https://stackoverflow.com/questions/6249095/how-to-set-caretcursor-position-in-contenteditable-element-div
+	// store selection
+	cursor = document.getSelection()
+	console.log(cursor)
+	node = cursor.anchorNode
+	range = document.createRange()
+	range.setStart(node, cursor.anchorOffset)
+	range.collapse(true)
+	// process mixed markdown
+	parent = GetCursorElement()
+	html = parent.innerHTML
+	md = converter.makeHtml(html)
+	html = converter.makeMarkdown(md)
+	parent.innerHTML = html
+	//restore selection
+	cursor.removeAllRanges()
+	cursor.addRange(range)
 }
 editor = document.getElementById('editor')
 editor.onkeyup = editor.onkeypress = RecieveKeys
@@ -41,3 +58,13 @@ function FilterMdOutput(md){
 	md = md.replace(/^- <input type="checkbox".+\n\n\s/gm, '\* [ ] ')
 	return md
 }
+
+function GetCursorElement(){
+	sel = document.getSelection()
+	parent = sel.baseNode.parentElement
+	if(parent.parentElement !== document.getElementById('editor')){
+		parent = parent.parentElement
+	}
+	return parent
+}
+window.GetCursorElement = GetCursorElement
