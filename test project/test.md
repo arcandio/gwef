@@ -1,12 +1,3 @@
----
-name: testman
-tags:
-  - @tag
-  - @othertag
-backlinks:
-  - characters/bill.md
----
-
 # Heading
 ## heading
 ### heading
@@ -17,11 +8,15 @@ backlinks:
 * bullet
 * [link](characters/bill.md)
 
-@tag @othertag
-
 [[wikilink]]
 
 bill < autolink
+
+paragraph with a break after, should present a newline between this and the next one.
+
+
+
+There should be a blank line above this.
 
 ---
 
@@ -35,7 +30,7 @@ bill < autolink
 1. numbered list
 2. list item 2
 
-* [ ] check
+* [x] check
 * [ ] check 2
 
 > Blockquote

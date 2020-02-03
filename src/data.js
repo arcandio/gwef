@@ -95,7 +95,7 @@ function OpenFileType(p, ext){
 function OpenDocument(p){
 	c = fs.readFile(p, 'utf8', (err, data) => {
 		if (err) {console.error(err)}
-		window.LoadAllBlocks(data)
+		window.LoadMd(data)
 	})
 }
 

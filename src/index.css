@@ -40,7 +40,9 @@ body {
 	margin: 0 auto;
 	padding: 1rem 2rem;
 }
-
+#footer {
+	user-select: none;
+}
 #pagename h1 {
 	margin: 0 auto;
 }
@@ -91,7 +93,7 @@ div#treeview li.collapsed ul {
 	background: rgba(255, 255, 255, .1);
 }
 #treeview li.open span:after {
-	content:" 👁️►";
+	content:" 👁️";
 	float: right;
 }
 
@@ -101,36 +103,56 @@ TEXT
 
 ===================================================
 */
-[data-blocktype^="heading"]{
-	font-weight: bold;
+td, th{
+	padding: .3rem;
 }
-[data-blocktype="heading1"]{
-	font-size: 3rem;
+/*tr:nth-child(even),
+thead{
+	background: #111;
+}*/
+tr, td, th, table{
+	border: 2px #333 groove;
+	border-collapse: collapse;
 }
-[data-blocktype="heading2"]{
-	font-size: 2.75rem;
+hr {
+	border: none;
+	border-bottom: 2px #333 groove;
 }
-[data-blocktype="heading3"]{
-	font-size: 2.5rem;
+h1, h2, h3, h4, h5, h6 {
+	border-bottom: 2px #333 groove;
 }
-[data-blocktype="heading4"]{
-	font-size: 2.25rem;
+[contenteditable] {
+	text-shadow: 0 1px 0 rgba(0, 0, 0, 1);
 }
-[data-blocktype="heading5"]{
-	font-size: 2rem;
+a[href$=".md"]:after{
+	content: "🔗"
 }
-[data-blocktype="heading6"]{
-	font-size: 1.75rem;
+a[href$=".md"]:hover {
+	color: white;
 }
-[data-blocktype="bullet"]{
-	padding-left: 1rem;
+a[href$=".md"]:after:hover{
+	content:"go";
 }
-[data-blocktype="checkbox"]{
-	padding-left: 1rem;
+:focus {
+	outline: none;
 }
-[data-blocktype="numbered"]{
-	padding-left: 1rem;
+::selection {
+	background: white;
+	color: black;
+	text-shadow: 0 1px 0 rgba(255,255,255,.5);
 }
-[data-blocktype="paragraph"]{
-	margin: 1rem 0;
+/*
+div#editor > * {
+	position: relative;
 }
+div#editor > *:before{
+	content: "h1";
+	position: absolute;
+	margin-left: -2rem;
+	bottom: 0;
+	width: 2rem;
+	text-align: center;
+	font-size: 1rem;
+	opacity: .5;
+}
+*/
