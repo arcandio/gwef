@@ -93,7 +93,7 @@ div#treeview li.collapsed ul {
 	background: rgba(255, 255, 255, .1);
 }
 #treeview li.open span:after {
-	content:" 👁️►";
+	content:" 👁️";
 	float: right;
 }
 
@@ -141,3 +141,18 @@ a[href$=".md"]:after:hover{
 	color: black;
 	text-shadow: 0 1px 0 rgba(255,255,255,.5);
 }
+/*
+div#editor > * {
+	position: relative;
+}
+div#editor > *:before{
+	content: "h1";
+	position: absolute;
+	margin-left: -2rem;
+	bottom: 0;
+	width: 2rem;
+	text-align: center;
+	font-size: 1rem;
+	opacity: .5;
+}
+*/
