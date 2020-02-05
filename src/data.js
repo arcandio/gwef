@@ -12,26 +12,21 @@ var tree = null;
 //var projectdir = null;
 var projectdir = "F:\\freelance\\repos\\gwef\\ExampleProject";
 
-document.getElementById("loadproject").onclick = function(){
-		console.log('load project');
-		OpenProject();
-	}
+document.getElementById("loadproject").onclick = function(){OpenProject()}
 
 //BuildTree()
 
 function OpenProject(){
 	var options = {properties:["openDirectory", 'multiSelections']}
-	dialog.showOpenDialog(options, (dirs) => {
-		console.log(dirs)
-	})
+	var newpath = dialog.showOpenDialogSync(window.main, options)
 	//console.log(newpath)
-	//projectdir = newpath
-	//BuildTree()
+	projectdir = newpath[0]
+	BuildTree()
 }
 
 function BuildTree(){
 	tree = dirTree(projectdir, {extensions: /\.(md|jpg|png)$/})
-	console.log(tree)
+	//console.log(tree)
 	if (tree){
 		//console.log(tree)
 		tv = document.getElementById("treeview")
