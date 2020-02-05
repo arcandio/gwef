@@ -27,7 +27,19 @@
  */
  import './index.css'
  import './text.js'
- import './ui.js'
  import './data.js'
  import './contextmenu.js'
+ //import './ui.js'
  //import './test.js'
+
+if(module.hot){
+	module.hot.accept('./data.js', function(){
+		console.log('hmr update')
+	})
+	module.hot.accept('./text.js', function(){
+		console.log('hmr update')
+	})
+	module.hot.accept('./contextmenu.js', function(){
+		console.log('hmr update')
+	})
+}

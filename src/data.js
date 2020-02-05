@@ -6,23 +6,45 @@ var http = require('http');
 var fs = require('graceful-fs');
 var path = require('path');
 
-const text = require('./text.js')
-const dirTree = require("directory-tree")
+const text = require('./text.js');
+const dirTree = require("directory-tree");
+var tree = null;
+//var projectdir = null;
+var projectdir = "F:\\freelance\\repos\\gwef\\ExampleProject";
 
-document.getElementById("loadproject").onclick = function(){BuildTree()}
+document.getElementById("loadproject").onclick = function(){
+		console.log('load project');
+		OpenProject();
+	}
 
-BuildTree()
+//BuildTree()
+
+function OpenProject(){
+	var options = {properties:["openDirectory", 'multiSelections']}
+	dialog.showOpenDialog(options, (dirs) => {
+		console.log(dirs)
+	})
+	//console.log(newpath)
+	//projectdir = newpath
+	//BuildTree()
+}
 
 function BuildTree(){
-	const tree = dirTree('F:/freelance/repos/gwe/electronforge test/eftest/gwef/gwef/test project', {extensions: /\.(md|jpg|png)$/})
-	//console.log(tree)
-	tv = document.getElementById("treeview")
-	ul = tv.getElementsByTagName('ul')[0]
-	while (ul.firstChild){
-		ul.removeChild(ul.firstChild)
+	tree = dirTree(projectdir, {extensions: /\.(md|jpg|png)$/})
+	console.log(tree)
+	if (tree){
+		//console.log(tree)
+		tv = document.getElementById("treeview")
+		ul = tv.getElementsByTagName('ul')[0]
+		while (ul.firstChild){
+			ul.removeChild(ul.firstChild)
+		}
+		ListDir(tree, ul)
+		//tv.replaceChild(t, tv.getElementsByTagName('ul')[0])
 	}
-	ListDir(tree, ul)
-	//tv.replaceChild(t, tv.getElementsByTagName('ul')[0])
+	else {
+		console.log('did not find the directory:', projectdir)
+	}
 }
 
 function ListDir(obj, parent){
