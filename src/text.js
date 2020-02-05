@@ -3,9 +3,11 @@ showdown.setFlavor('github')
 const converter = new showdown.Converter()
 
 function LoadMd(data){
+	console.log('LoadMd')
+	
 	document.getElementById('editor').innerHTML = converter.makeHtml(data)
 }
-window.LoadMd = LoadMd
+exports.LoadMd = LoadMd
 
 function GetMd(){
 	var md = converter.makeMarkdown(document.getElementById('editor').innerHTML)

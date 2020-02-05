@@ -25,10 +25,10 @@
  *  });
  * ```
  */
- import './index.css'
- import './text.js'
- import './data.js'
- import './contextmenu.js'
+ import './index.css';
+ import * as text from './text.js';
+ import * as data from './data.js';
+ import './contextmenu.js';
  //import './ui.js'
  //import './test.js'
 
@@ -37,9 +37,10 @@ if(module.hot){
 		console.log('hmr update')
 	})
 	module.hot.accept('./text.js', function(){
-		console.log('hmr update')
+		console.log('hmr update', text)
 	})
 	module.hot.accept('./contextmenu.js', function(){
 		console.log('hmr update')
 	})
+	module.hot.accept()
 }

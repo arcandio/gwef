@@ -112,12 +112,12 @@ function OpenFileType(p, ext){
 function OpenDocument(p){
 	c = fs.readFile(p, 'utf8', (err, data) => {
 		if (err) {console.error(err)}
-		window.LoadMd(data)
+		text.LoadMd(data)
 	})
 }
 
 function OpenImage(p){
-	b64 = fs.readFile(p, (err, data) => {
+	fs.readFile(p, (err, data) => {
 		if (err) {console.error(err)}
 		payload = 'data:image/png;base64,' + data.toString('base64')
 		img = document.createElement('img')
@@ -126,3 +126,4 @@ function OpenImage(p){
 		document.getElementById("editor").appendChild(img)
 	})
 }
+
