@@ -3,8 +3,7 @@ showdown.setFlavor('github')
 const converter = new showdown.Converter()
 
 function LoadMd(data){
-	console.log('LoadMd')
-	
+	console.log(arguments.callee.name)
 	document.getElementById('editor').innerHTML = converter.makeHtml(data)
 }
 exports.LoadMd = LoadMd

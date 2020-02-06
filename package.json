@@ -73,10 +73,12 @@
     "css-loader": "^3.0.0",
     "electron": "7.1.10",
     "node-loader": "^0.6.0",
-    "style-loader": "^0.23.1"
+    "style-loader": "^0.23.1",
+    "url-loader": "^3.0.0"
   },
   "dependencies": {
     "directory-tree": "^2.2.4",
+    "electron-json-storage": "^4.1.8",
     "electron-squirrel-startup": "^1.0.0",
     "graceful-fs": "^4.2.3",
     "lorem-ipsum": "^2.0.3",

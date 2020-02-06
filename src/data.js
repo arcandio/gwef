@@ -11,10 +11,31 @@ const dirTree = require("directory-tree");
 var tree = null;
 //var projectdir = null;
 var projectdir = "F:\\freelance\\repos\\gwef\\ExampleProject";
+const storage = require('electron-json-storage');
+const defaultDataPath = storage.getDefaultDataPath()
 
 document.getElementById("loadproject").onclick = function(){OpenProject()}
 
-//BuildTree()
+function InitialOpen(){
+	console.log(arguments.callee.name)
+	storage.getAll(function(error, data) {
+		console.log('io fired')
+		if (error) throw error;
+		console.log(data)
+		if(data){
+			var lp = data["lastProject"]
+			if(lp){
+				projectdir = lp
+				BuildTree()
+				var lf = data["lastFile"]
+				if(lf){
+					FileSummoned(lf)
+				}
+			}
+		}
+	})
+}
+
 
 function OpenProject(){
 	var options = {properties:["openDirectory", 'multiSelections']}
@@ -22,6 +43,8 @@ function OpenProject(){
 	//console.log(newpath)
 	projectdir = newpath[0]
 	BuildTree()
+	// remember our last open project
+	storage.set('lastProject', projectdir, function(error) {if (error) throw error;})
 }
 
 function BuildTree(){
@@ -65,6 +88,7 @@ function ListDir(obj, parent){
 		else {
 			// bind function
 			span.onclick = function(){FileClicked(event)}
+			li.classList.add('file')
 		}
 	})
 }
@@ -72,7 +96,7 @@ function ListDir(obj, parent){
 function FolderClicked(e){
 	e.stopPropagation()
 	parent = e.target.parentElement
-	console.log('toggle folder', parent)
+	console.log(arguments.callee.name, parent)
 	parent.classList.toggle('collapsed')
 }
 
@@ -80,27 +104,43 @@ function FileClicked(e){
 	e.stopPropagation()
 	parent = e.target.parentElement
 	p = parent.getAttribute('data-path')
-	ext = parent.getAttribute('data-type')
-	console.log('open file', p)
-	OpenFileType(p, ext)
-	//set file highlight
-	o = document.getElementsByClassName('open')
-	Array.from(o).forEach(element => {element.classList.remove('open')})
-	parent.classList.add('open')
+	FileSummoned(p)
 }
 
-function OpenFileType(p, ext){
-	filename = path.parse(p).name
+function FileSummoned(p){
+	console.log(arguments.callee.name, p)
+	OpenFileType(p)
+	HighlightOpenedFile(p)
+}
+
+function HighlightOpenedFile(p){
+	var o = document.getElementsByClassName('open')
+	Array.from(o).forEach(element => {element.classList.remove('open')})
+	var files = document.getElementsByClassName('file')
+	Array.from(files).forEach((file) => {
+		var treepath = file.dataset.path
+		//console.log(treepath)
+		if(treepath == p){
+			file.classList.add('open')
+		}	
+	})
+}
+
+function OpenFileType(p){
+	var parseObject = path.parse(p)
+	var filename = parseObject.name
+	var ext = parseObject.ext
 	document.getElementById("pagename").innerHTML = filename
 	document.title = "GWEF - " + filename
+	storage.set('lastFile', p, function(error) {if (error) throw error;})
 	switch(ext){
 		case '.md':
-			console.log('document')
+			//console.log('document')
 			OpenDocument(p)
 			break;
 		case '.jpg':
 		case '.png':
-			console.log('image')
+			//console.log('image')
 			OpenImage(p);
 			break;
 		default:
@@ -110,10 +150,12 @@ function OpenFileType(p, ext){
 }
 
 function OpenDocument(p){
-	c = fs.readFile(p, 'utf8', (err, data) => {
+	console.log(p)
+	fs.readFile(p, 'utf8', (err, data) => {
 		if (err) {console.error(err)}
 		text.LoadMd(data)
 	})
+	console.log('OpenDocument')
 }
 
 function OpenImage(p){
@@ -127,3 +169,4 @@ function OpenImage(p){
 	})
 }
 
+InitialOpen()
