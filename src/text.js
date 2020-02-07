@@ -1,5 +1,5 @@
-const data = require('./data.js');
-const selection = require('./selection.js');
+const data = require('./data.js')
+const selection = require('./selection.js')
 const showdown = require('showdown')
 showdown.setFlavor('github')
 const converter = new showdown.Converter()
@@ -86,6 +86,22 @@ function FilterMdOutput(md){
 	md = md.replace(/\&nbsp\;/g, ' ')
 	md = md.replace(/^- <input type="checkbox".+checked.+\n\n\s/gm, '\* [x] ')
 	md = md.replace(/^- <input type="checkbox".+\n\n\s/gm, '\* [ ] ')
+	md = CheckForLinks(md)
+	return md
+}
+
+function CheckForLinks(md){
+	let names = Object.keys(data.namesInProject)
+	for (var i = 0; i < names.length; i++){
+		let name = names[i]
+		let s = '(?<!\\[|\\\\)' + name + "(?!\\]|\\\\.)"
+		console.log(s)
+		let rex = new RegExp(s, 'gm')
+		console.log(rex)
+		let rep = '\[$&\]\(' + data.namesInProject[name] + '\)'
+		md = md.replace(rex, rep)
+		console.log(md)
+	}
 	return md
 }
 

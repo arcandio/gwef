@@ -14,6 +14,7 @@ var projectdir = "F:\\freelance\\repos\\gwef\\ExampleProject";
 const storage = require('electron-json-storage');
 const defaultDataPath = storage.getDefaultDataPath()
 var openfile = null
+var namesInProject = {}
 
 document.getElementById("loadproject").onclick = function(){OpenProject()}
 
@@ -50,11 +51,12 @@ function OpenProject(){
 
 function BuildTree(){
 	tree = dirTree(projectdir, {extensions: /\.(md|jpg|png)$/})
+	namesInProject = {}
 	//console.log(tree)
 	if (tree){
 		//console.log(tree)
-		tv = document.getElementById("treeview")
-		ul = tv.getElementsByTagName('ul')[0]
+		var tv = document.getElementById("treeview")
+		var ul = tv.getElementsByTagName('ul')[0]
 		while (ul.firstChild){
 			ul.removeChild(ul.firstChild)
 		}
@@ -64,15 +66,17 @@ function BuildTree(){
 	else {
 		console.error('did not find the directory:', projectdir)
 	}
+	//console.log(namesInProject)
 }
 
 function ListDir(obj, parent){
 	obj.children.forEach(function(element){
-		name = element.name
-		li = document.createElement('li')
-		x = element.extension || ''
-		span = document.createElement('span')
-		span.innerHTML = name.replace(x, '')
+		var name = element.name
+		var li = document.createElement('li')
+		var x = element.extension || ''
+		var span = document.createElement('span')
+		var nameonly = name.replace(x, '')
+		span.innerHTML = nameonly
 		span.classList.add('leaf')
 		li.appendChild(span)
 		parent.appendChild(li)
@@ -82,7 +86,7 @@ function ListDir(obj, parent){
 			// bind function
 			span.onclick = function(){FolderClicked(event)}
 			// process children
-			ul = document.createElement('ul')
+			var ul = document.createElement('ul')
 			li.appendChild(ul)
 			ListDir(element, ul)
 		}
@@ -90,6 +94,7 @@ function ListDir(obj, parent){
 			// bind function
 			span.onclick = function(){FileClicked(event)}
 			li.classList.add('file')
+			namesInProject[nameonly] = element.path
 		}
 	})
 }
@@ -153,7 +158,7 @@ function SetTitle(dirty){
 	dirty = dirty ? " ⚠" : ""
 	document.title = "GWEF - " + openfile + dirty
 }
-exports.SetTitle = SetTitle
+//exports.SetTitle = SetTitle
 
 
 function OpenDocument(p){
@@ -176,3 +181,5 @@ function OpenImage(p){
 }
 
 InitialOpen()
+
+export {namesInProject, SetTitle}
