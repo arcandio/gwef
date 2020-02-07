@@ -35,17 +35,7 @@ document.getElementById('savefile').onclick = function(){
 }
 
 function RecieveKeys(e){
-	/*
-	https://javascript.info/keyboard-events
-
-	switch behavior based on what keys are pressed, and what modifiers are down at the time.
-
-	e.ctrlKey
-	e.shiftKey
-	e.altKey
-	e.metaKey
-	e.repeat
-	*/
+	// https://javascript.info/keyboard-events
 	var ignoredKey = ingoredKeys.includes(e.key)
 	var modifierKey =
 		e.ctrlKey ||
@@ -58,7 +48,7 @@ function RecieveKeys(e){
 		timeout = setTimeout(() => {
 			console.log(arguments.callee.name, 'rebuild md')
 			RebuildMd()
-		}, 2000)
+		}, 1000)
 	}
 }
 editor.onkeyup = RecieveKeys
