@@ -4,7 +4,7 @@
 
 This work-in-progress project is an attempt to create a markdown-based personal wiki designed to be fast and powerful enough for use *during* a D&D or other TTRPG session.
 
-![screenshot](docs\screenshot.png)
+![screenshot](docs/screenshot.png)
 
 ## dev setup
 
