@@ -1,6 +1,19 @@
 const showdown = require('showdown')
 showdown.setFlavor('github')
 const converter = new showdown.Converter()
+var timeout = null
+const ingoredKeys = [
+	'ArrowRight',
+	'ArrowLeft',
+	'ArrowUp',
+	'ArrowDown',
+	'Home',
+	'End',
+	'Insert',
+	'Control',
+	'Shift',
+	'Alt'
+]
 
 function LoadMd(data){
 	console.log(arguments.callee.name)
@@ -19,7 +32,6 @@ document.getElementById('savefile').onclick = function(){
 }
 
 function RecieveKeys(e){
-	console.log('key', e.key)
 	/*
 	https://javascript.info/keyboard-events
 
@@ -31,19 +43,31 @@ function RecieveKeys(e){
 	e.metaKey
 	e.repeat
 	*/
-	RebuildMd()
+	var ignoredKey = ingoredKeys.includes(e.key)
+	var modifierKey =
+		e.ctrlKey ||
+		e.altKey ||
+		e.metaKey
+	console.log('key', e.key, ignoredKey, modifierKey)
+	if( !ignoredKey && !modifierKey ){
+		clearTimeout(timeout)
+		timeout = setTimeout(() => {
+			console.log(arguments.callee.name, 'rebuild md')
+			RebuildMd()
+		}, 2000)
+	}
 }
 var editor = document.getElementById('editor')
 editor.onkeyup = RecieveKeys
 
 function RebuildMd(){
 	// store selection
-	parent = GetCursorElement()
+	var parent = GetCursorElement()
 	var el = parent
     var offset = getCaretCharacterOffsetWithin(el)
 	// process mixed markdown
-	html = parent.innerHTML
-	md = converter.makeMarkdown(html)
+	var html = parent.innerHTML
+	var md = converter.makeMarkdown(html)
 	md = FilterMdOutput(md)
 	html = converter.makeHtml(md)
 	parent.innerHTML = html
@@ -104,7 +128,7 @@ function SetCaretPosition(el, pos){
 }
 
 function FilterMdOutput(md){
-	console.log('filtered')
+	console.log(arguments.callee.name)
 	md = md.replace(/\n<!-- -->\n/g, '\n\n')
 	md = md.replace(/^- <input type="checkbox".+checked.+\n\n\s/gm, '\* [x] ')
 	md = md.replace(/^- <input type="checkbox".+\n\n\s/gm, '\* [ ] ')
