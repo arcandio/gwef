@@ -1,3 +1,4 @@
+const data = require('./data.js');
 const showdown = require('showdown')
 showdown.setFlavor('github')
 const converter = new showdown.Converter()
@@ -5,8 +6,8 @@ var timeout = null
 const ingoredKeys = [
 	'ArrowRight',
 	'ArrowLeft',
-	'ArrowUp',
-	'ArrowDown',
+	//'ArrowUp',
+	//'ArrowDown',
 	'Home',
 	'End',
 	'Insert',
@@ -51,6 +52,7 @@ function RecieveKeys(e){
 		e.metaKey
 	//console.log('key', e.key, ignoredKey, modifierKey)
 	if( !ignoredKey && !modifierKey ){
+		MarkDirty()
 		clearTimeout(timeout)
 		timeout = setTimeout(() => {
 			console.log(arguments.callee.name, 'rebuild md')
@@ -98,6 +100,17 @@ function ShrinkDcSelection(event){
 	}
 }
 editor.onmouseup = ShrinkDcSelection
+
+function MarkDirty(){
+	//console.log(arguments.callee.name)
+	data.SetTitle(true)
+}
+
+/*
+
+selection stuff
+
+=======================================================*/
 
 function getCaretCharacterOffsetWithin(element) {
     var caretOffset = 0;
@@ -159,4 +172,4 @@ function GetCursorElement(){
 	}
 	return parent
 }
-window.GetCursorElement = GetCursorElement
+//window.GetCursorElement = GetCursorElement

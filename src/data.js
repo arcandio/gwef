@@ -13,6 +13,7 @@ var tree = null;
 var projectdir = "F:\\freelance\\repos\\gwef\\ExampleProject";
 const storage = require('electron-json-storage');
 const defaultDataPath = storage.getDefaultDataPath()
+var openfile = null
 
 document.getElementById("loadproject").onclick = function(){OpenProject()}
 
@@ -128,10 +129,9 @@ function HighlightOpenedFile(p){
 
 function OpenFileType(p){
 	var parseObject = path.parse(p)
-	var filename = parseObject.name
+	openfile = parseObject.name
 	var ext = parseObject.ext
-	//document.getElementById("pagename").innerHTML = filename
-	document.title = "GWEF - " + filename
+	SetTitle(false)
 	storage.set('lastFile', p, function(error) {if (error) throw error;})
 	switch(ext){
 		case '.md':
@@ -148,6 +148,13 @@ function OpenFileType(p){
 			break;
 	}
 }
+
+function SetTitle(dirty){
+	dirty = dirty ? " ⚠" : ""
+	document.title = "GWEF - " + openfile + dirty
+}
+exports.SetTitle = SetTitle
+
 
 function OpenDocument(p){
 	//console.log(arguments.callee.name, p)

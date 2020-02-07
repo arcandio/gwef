@@ -34,13 +34,13 @@
 
 if(module.hot){
 	module.hot.accept('./data.js', function(){
-		console.log('hmr update')
+		//console.log('hmr update')
 	})
 	module.hot.accept('./text.js', function(){
-		console.log('hmr update', text)
+		//console.log('hmr update', text)
 	})
 	module.hot.accept('./contextmenu.js', function(){
-		console.log('hmr update')
+		//console.log('hmr update')
 	})
 	module.hot.accept()
 }
