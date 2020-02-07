@@ -17,11 +17,11 @@ const defaultDataPath = storage.getDefaultDataPath()
 document.getElementById("loadproject").onclick = function(){OpenProject()}
 
 function InitialOpen(){
-	console.log(arguments.callee.name)
+	//console.log(arguments.callee.name)
 	storage.getAll(function(error, data) {
-		console.log('io fired')
+		//console.log('io fired')
 		if (error) throw error;
-		console.log(data)
+		//console.log(data)
 		if(data){
 			var lp = data["lastProject"]
 			if(lp){
@@ -61,7 +61,7 @@ function BuildTree(){
 		//tv.replaceChild(t, tv.getElementsByTagName('ul')[0])
 	}
 	else {
-		console.log('did not find the directory:', projectdir)
+		console.error('did not find the directory:', projectdir)
 	}
 }
 
@@ -108,7 +108,7 @@ function FileClicked(e){
 }
 
 function FileSummoned(p){
-	console.log(arguments.callee.name, p)
+	//console.log(arguments.callee.name, p)
 	OpenFileType(p)
 	HighlightOpenedFile(p)
 }
@@ -130,7 +130,7 @@ function OpenFileType(p){
 	var parseObject = path.parse(p)
 	var filename = parseObject.name
 	var ext = parseObject.ext
-	document.getElementById("pagename").innerHTML = filename
+	//document.getElementById("pagename").innerHTML = filename
 	document.title = "GWEF - " + filename
 	storage.set('lastFile', p, function(error) {if (error) throw error;})
 	switch(ext){
@@ -150,12 +150,11 @@ function OpenFileType(p){
 }
 
 function OpenDocument(p){
-	console.log(p)
+	//console.log(arguments.callee.name, p)
 	fs.readFile(p, 'utf8', (err, data) => {
 		if (err) {console.error(err)}
 		text.LoadMd(data)
 	})
-	console.log('OpenDocument')
 }
 
 function OpenImage(p){

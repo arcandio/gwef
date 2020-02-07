@@ -14,9 +14,10 @@ const ingoredKeys = [
 	'Shift',
 	'Alt'
 ]
+var editor = document.getElementById('editor')
 
 function LoadMd(data){
-	console.log(arguments.callee.name)
+	//console.log(arguments.callee.name)
 	document.getElementById('editor').innerHTML = converter.makeHtml(data)
 }
 exports.LoadMd = LoadMd
@@ -48,7 +49,7 @@ function RecieveKeys(e){
 		e.ctrlKey ||
 		e.altKey ||
 		e.metaKey
-	console.log('key', e.key, ignoredKey, modifierKey)
+	//console.log('key', e.key, ignoredKey, modifierKey)
 	if( !ignoredKey && !modifierKey ){
 		clearTimeout(timeout)
 		timeout = setTimeout(() => {
@@ -57,7 +58,6 @@ function RecieveKeys(e){
 		}, 2000)
 	}
 }
-var editor = document.getElementById('editor')
 editor.onkeyup = RecieveKeys
 
 function RebuildMd(){
@@ -67,13 +67,37 @@ function RebuildMd(){
     var offset = getCaretCharacterOffsetWithin(el)
 	// process mixed markdown
 	var html = parent.innerHTML
+	console.log(html)
 	var md = converter.makeMarkdown(html)
+	console.log(md)
 	md = FilterMdOutput(md)
 	html = converter.makeHtml(md)
 	parent.innerHTML = html
 	//restore selection
 	SetCaretPosition(el, offset)
 }
+
+function FilterMdOutput(md){
+	//console.log(arguments.callee.name)
+	md = md.replace(/\n<!-- -->\n/g, '\n\n')
+	md = md.replace(/\&nbsp\;/g, ' ')
+	md = md.replace(/^- <input type="checkbox".+checked.+\n\n\s/gm, '\* [x] ')
+	md = md.replace(/^- <input type="checkbox".+\n\n\s/gm, '\* [ ] ')
+	return md
+}
+
+function ShrinkDcSelection(event){
+	if(event.detail === 2){
+		var sel = document.getSelection()
+		var range = sel.getRangeAt(0)
+		var text = range.toString()
+		var trm = text.endsWith(" ")
+		if(trm){
+			range.setEnd(range.endContainer, range.endOffset - 1)
+		}
+	}
+}
+editor.onmouseup = ShrinkDcSelection
 
 function getCaretCharacterOffsetWithin(element) {
     var caretOffset = 0;
@@ -127,14 +151,6 @@ function SetCaretPosition(el, pos){
     return pos; // needed because of recursion stuff
 }
 
-function FilterMdOutput(md){
-	console.log(arguments.callee.name)
-	md = md.replace(/\n<!-- -->\n/g, '\n\n')
-	md = md.replace(/^- <input type="checkbox".+checked.+\n\n\s/gm, '\* [x] ')
-	md = md.replace(/^- <input type="checkbox".+\n\n\s/gm, '\* [ ] ')
-	return md
-}
-
 function GetCursorElement(){
 	sel = document.getSelection()
 	parent = sel.baseNode.parentElement
@@ -144,47 +160,3 @@ function GetCursorElement(){
 	return parent
 }
 window.GetCursorElement = GetCursorElement
-
-/*
-function CreateRange(node, chars, range){
-	if(!range){
-		range = document.createRange()
-		range.selectNode(node)
-		range.setStart(node, 0)
-	}
-	if (chars.count === 0){
-		range.setEnd(node, chars.count)
-	}
-	else if (node && chars.count > 0) {
-		if (node.nodeType === Node.TEXT_NODE) {
-			chars.count -= node.textContent.length
-		}
-		else {
-			console.log('range', range)
-			range.setEnd(node, chars.count)
-			chars.count = 0
-		}
-	}
-	else {
-		for (let lp = 0; lp < node.childNodes.length; lp++) {
-			range = CreateRange(node.childNodes[lp], chars, range)
-			if (chars.count === 0){
-				break
-			}
-		}
-	}
-	return range
-}
-
-function SetCurrentCursorPosition(chars, parent){
-	if (chars >= 0){
-		var selection = window.getSelection()
-		range = CreateRange(parent, {count: chars})
-		if (range){
-			range.collapse(false)
-			selection.removeAllRanges()
-			selection.addRange(range)
-		}
-	}
-}
-*/
