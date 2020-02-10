@@ -7,8 +7,6 @@ var timeout = null
 const ingoredKeys = [
 	'ArrowRight',
 	'ArrowLeft',
-	//'ArrowUp',
-	//'ArrowDown',
 	'Home',
 	'End',
 	'Insert',

@@ -109,7 +109,7 @@ function FolderClicked(e){
 function FileClicked(e){
 	e.stopPropagation()
 	parent = e.target.parentElement
-	p = parent.getAttribute('data-path')
+	var p = parent.getAttribute('data-path')
 	FileSummoned(p)
 }
 
@@ -172,8 +172,8 @@ function OpenDocument(p){
 function OpenImage(p){
 	fs.readFile(p, (err, data) => {
 		if (err) {console.error(err)}
-		payload = 'data:image/png;base64,' + data.toString('base64')
-		img = document.createElement('img')
+		var payload = 'data:image/png;base64,' + data.toString('base64')
+		var img = document.createElement('img')
 		img.src = payload
 		document.getElementById("editor").innerHTML = ''
 		document.getElementById("editor").appendChild(img)

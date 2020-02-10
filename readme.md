@@ -76,36 +76,28 @@ This work-in-progress project is an attempt to create a markdown-based personal 
   * blocks: paragraphs, etc
     * spans: bold, etc
 
-### pseudocode
-
-* for each line
-  * keep last container
-  * get current block type
-    * search line for inline styles
-    * create spans
-
 ### list of styles
 
 * container styles
-  * blockquote
-  * codebox
-  * unordered list
-  * ordered list
-  * check list
-  * table
+  * blockquote >>>
+  * codebox ```
+  * unordered list *, - 
+  * ordered list 1. 
+  * check list * [ ], - [ ]
+  * table |
 * Block/paragraph styles
   * paragraph
-  * heading
-  * horizontal rule
+  * heading #
+  * horizontal rule ---, ***
 * Inline/Character styles
-  * bold
-  * italic
-  * highlight
-  * link
-  * code
-  * strike
+  * bold ** __
+  * italic * _
+  * highlight ==
+  * link []()
+  * code `
+  * strike ~~
 * Save for later
-  * math?
+  * math? $
 
 # Problems & Solutions
 
