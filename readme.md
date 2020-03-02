@@ -18,7 +18,10 @@ This work-in-progress project is an attempt to create a markdown-based personal 
 ## Key Features (make or break)
 
 * Non-refresh formatting, live as you type (typora-like) :construction:
+  * Possiby: [https://canner.github.io/canner-slate-editor/?selectedKind=canner-slate-editor&selectedStory=Simple%20demo&full=0&addons=1&stories=1&panelRight=0](https://canner.github.io/canner-slate-editor/?selectedKind=canner-slate-editor&selectedStory=Simple demo&full=0&addons=1&stories=1&panelRight=0)
+  * https://github.com/ianstormtaylor/slate#why
 * markdown limited formatting :construction:
+  * https://github.com/markdown-it/markdown-it/blob/master/docs/architecture.md
 * save & load markdown files :construction:
 * project structure & treeview :heavy_check_mark:
 * automatically link existing files :heavy_check_mark:
@@ -72,9 +75,7 @@ This work-in-progress project is an attempt to create a markdown-based personal 
 
 ### structure
 
-* containers: lists, blockquotes, tables, code
-  * blocks: paragraphs, etc
-    * spans: bold, etc
+https://github.com/markdown-it/markdown-it/blob/master/docs/architecture.md
 
 ### list of styles
 
@@ -95,11 +96,19 @@ This work-in-progress project is an attempt to create a markdown-based personal 
   * highlight ==
   * link []()
   * code `
-  * strike ~~
+  * strike ~~test~~
 * Save for later
   * math? $
 
 # Problems & Solutions
+
+## conversion to and from CLEAN md
+
+* https://markdown-it.github.io/markdown-it/
+  * Customize output, possibly rewrite all rules
+  * parse line? Parse block?
+  * still need the selection replacement code, can't jive markdown-it up with range-replace or range-wrap techniques
+  * Test parser in separate node app?
 
 ## troubleshooting
 

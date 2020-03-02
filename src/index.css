@@ -10,7 +10,7 @@ body {
   margin: 0;
   padding: 0;
   max-width: 38rem;
-  color: gray;
+  color: #ccc;
   /*background-image: url("assets/blackmamba.png");*/
 }
 #container {

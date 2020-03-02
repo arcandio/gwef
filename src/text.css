@@ -1,0 +1,55 @@
+div.mdraw:hover {
+	box-shadow: 1px 1px 3px inset black;
+	outline: 1px solid #ffffff22
+}
+div.mdraw:after{
+	content: ".";
+	visibility: hidden;
+}
+
+.markup {
+	display: none;
+}
+div:hover > span > .markup {
+	display: inline;
+}
+/*breaks UI by moving element repeatedly*/
+ 
+div:hover > span > .inlinehtml {
+	opacity: .5;
+}
+/* span elements
+================================================*/
+
+
+.mdbold {
+	font-weight: bold;
+}
+.mditalic {
+	font-style: italic;
+}
+.mdstrike {
+	text-decoration: line-through;
+}
+.mdcode {
+	font-family: monospace;
+}
+.mdmark {
+	background-color: #ffff0099;
+	color: black;
+	text-shadow: none;
+}
+.mdimage img{
+	box-shadow: 0 1px 0 rgba(0, 0, 0, 1)
+}
+a {
+	color: #66f;
+}
+
+/* Block elements
+=================================================*/
+
+.header {
+	font-weight: bold;
+	font-size: 2rem;
+}

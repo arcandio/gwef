@@ -26,6 +26,7 @@
  * ```
  */
  import './index.css';
+ import './text.css';
  import './text.js';
  import './data.js';
  import './contextmenu.js';
