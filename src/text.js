@@ -4,60 +4,23 @@ const showdown = require('showdown')
 showdown.setFlavor('github')
 const converter = new showdown.Converter()
 var timeout = null
-const ingoredKeys = [
+const moveKeys = [
 	'ArrowRight',
 	'ArrowLeft',
+	'PageUp',
+	'PageDown',
 	'Home',
-	'End',
+	'End'
+]
+const ingoredKeys = [
 	'Insert',
 	'Control',
 	'Shift',
 	'Alt'
 ]
 var editor = document.getElementById('editor')
-
-function LoadMd(data){
-	//console.log(arguments.callee.name)
-	//document.getElementById('editor').innerHTML = converter.makeHtml(data)
-	document.getElementById('editor').innerHTML = ''
-	StartParseChain(data)
-}
-exports.LoadMd = LoadMd
-
-function StartParseChain(data){
-	// make a new fake block for each md line
-	var lines = data.split('\n')
-	lines.forEach(line => {
-		NewFakeBlock(line)
-	})
-}
-
-function NewFakeBlock(line){
-	element = document.createElement('div')
-	element.innerHTML = line
-	element.classList.add('mdraw')
-	document.getElementById('editor').appendChild(element)
-	ContainerPhase(element)
-}
-
-function ContainerPhase(container){
-	console.log(container)
-	// need to strip .inlinehtml child elements here
-	ihlist = container.querySelectorAll('.inlinehtml')
-	console.log(ihlist)
-	ihlist.forEach(ih => {
-		ih.remove()
-	})
-	// now that we've removed the inline html, reparse it all
-	var data = container.textContent
-	container.innerHTML = BlockPhase(data)
-}
-
-function BlockPhase(data){
-	return InlinePhase(data)
-}
-
-var inlineStyles = [
+var cursor = null
+const inlineStyles = [
 	{
 		pattern: /\*\*(\w[\s|\w]+\w)\*\*/,
 		markup: '**',
@@ -96,6 +59,56 @@ var inlineStyles = [
 		css: 'mdlink'
 	}
 ]
+
+
+function LoadMd(data){
+	//console.log(arguments.callee.name)
+	//document.getElementById('editor').innerHTML = converter.makeHtml(data)
+	document.getElementById('editor').innerHTML = ''
+	StartParseChain(data)
+}
+exports.LoadMd = LoadMd
+
+function StartParseChain(data){
+	// make a new fake block for each md line
+	var lines = data.split('\n')
+	lines.forEach(line => {
+		NewFakeBlock(line)
+	})
+}
+
+function NewFakeBlock(line){
+	element = document.createElement('div')
+	element.innerHTML = line
+	element.classList.add('mdline')
+	element.setAttribute("contentEditable", true)
+	//element.onkeyup = KeyUp
+	//element.onkeydown = KeyDown
+	element.onmousedown = MouseDown
+	document.getElementById('editor').appendChild(element)
+	ContainerPhase(element)
+}
+
+function ContainerPhase(container){
+	//console.log(arguments.callee.name, container)
+	if (!container){
+		console.error('MUST HAVE CONTAINER')
+	}
+	// need to strip .inlinehtml child elements here
+	ihlist = container.querySelectorAll('.inlinehtml')
+	//console.log(ihlist)
+	ihlist.forEach(ih => {
+		ih.remove()
+	})
+	// now that we've removed the inline html, reparse it all
+	var data = container.textContent
+	container.innerHTML = BlockPhase(data)
+
+}
+
+function BlockPhase(data){
+	return InlinePhase(data)
+}
 
 function InlinePhase(data){
 	inlineStyles.forEach(style => {
@@ -149,37 +162,79 @@ document.getElementById('savefile').onclick = function(){
 	GetMd()
 }
 
-function RecieveKeys(e){
-	// https://javascript.info/keyboard-events
+function KeyUp(e){
+	e.stopPropagation()
+	var line = selection.GetLineOfElement(selection.GetElementOfCursor())
+	console.log('line', line)
 	var ignoredKey = ingoredKeys.includes(e.key)
+	var moveKey = moveKeys.includes(e.key)
 	var modifierKey =
 		e.ctrlKey ||
 		e.altKey ||
 		e.metaKey
-	//console.log('key', e.key, ignoredKey, modifierKey)
-	if( !ignoredKey && !modifierKey ){
-		MarkDirty()
+	console.log('keyUp', e.key, ignoredKey, modifierKey)
+	if( !ignoredKey && !modifierKey && !moveKey ){
 		clearTimeout(timeout)
-		timeout = setTimeout(() => {
-			console.log(arguments.callee.name, 'rebuild md')
-			RebuildMd()
-		}, 1000)
+		timeout = setTimeout(ContainerPhase, 1000, line)
 	}
 }
-editor.onkeyup = RecieveKeys
+editor.onkeyup = KeyUp
 
-function RebuildMd(){
+function KeyDown(e){
+	console.log('keyDown')
+	e.stopPropagation()
+	MarkDirty()
+	var moveKey = moveKeys.includes(e.key)
+	if(moveKey){
+		console.log(arguments.callee.name, e)
+		ReparseThis()
+	}
+}
+editor.onkeydown = KeyDown
+
+function MouseDown(e){
+	e.stopPropagation()
+	ReparseLast(e.target)
+	UpdateCaret(e.target)
+}
+
+function UpdateCaret(target){
+	// reset all carets
+	var carets = document.querySelectorAll('.caret')
+	Array.from(carets).forEach((caret) => {
+		caret.classList.remove('caret')
+	})
+	// set this caret
+	var current = selection.GetLineOfElement(target)
+	current.classList.add('caret')
+}
+
+function ReparseLast(current){
+	var carets = document.querySelectorAll('.caret')
+	Array.from(carets).forEach((caret) => {
+		var line = selection.GetLineOfElement(caret)
+		var currentline = selection.GetLineOfElement(current)
+		if (line != currentline){
+			ContainerPhase(line)
+		}
+	})
+}
+
+// todo refactor this to match UpdateCaret()
+function ReparseThis(){
 	// store selection
-	var parent = selection.GetCursorElement()
+	var parent = selection.GetElementOfCursor()
 	var el = parent
     var offset = selection.GetCaretCharacterOffsetWithin(el)
 	// process mixed markdown
 	//ParseMd(parent)
-	container = parent.closest('.mdraw')
+	container = parent.closest('.mdline')
 	ContainerPhase(container)
 	//restore selection
 	selection.SetCaretPosition(el, offset)
 }
+
+
 /*
 function ParseMd(parent){
 	var text = parent.innerHTML

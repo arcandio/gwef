@@ -134,7 +134,7 @@ a[href$=".md"]:after:hover{
 	content:"go";
 }
 :focus {
-	outline: none;
+	/*outline: none;*/
 }
 ::selection {
 	background: white;

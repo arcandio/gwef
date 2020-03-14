@@ -1,8 +1,11 @@
-div.mdraw:hover {
+.mdline:hover {
 	box-shadow: 1px 1px 3px inset black;
-	outline: 1px solid #ffffff22
+	/*outline: 1px solid #ffffff22*/
 }
-div.mdraw:after{
+div.mdline:focus{
+	outline: 2px solid #f006;
+}
+div.mdline:after{
 	content: ".";
 	visibility: hidden;
 }
@@ -10,14 +13,15 @@ div.mdraw:after{
 .markup {
 	display: none;
 }
-div:hover > span > .markup {
+div.caret > span > .markup {
 	display: inline;
 }
 /*breaks UI by moving element repeatedly*/
  
-div:hover > span > .inlinehtml {
+div.caret > span > .inlinehtml {
 	opacity: .5;
 }
+
 /* span elements
 ================================================*/
 
